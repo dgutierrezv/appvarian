@@ -8,11 +8,14 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 h2, h3 {
     text-align: center;
     margin: 10px;
+    font-size: 1.5rem;
 }
 
 form {
@@ -29,6 +32,7 @@ input, button {
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
+    font-size: 1rem;
 }
 
 table {
@@ -37,6 +41,7 @@ table {
     margin: 20px auto;
     border-collapse: collapse;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
 }
 
 th, td {
@@ -69,34 +74,28 @@ button:hover {
     background-color: #45a049;
 }
 
-.delete-button{
-    background-color: rgb(255, 0, 0); /* Color inicial de los botones */
-    color: #fff; /* Color del texto */
+.delete-button {
+    background-color: rgb(255, 0, 0);
+    color: #fff;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
 }
 
-.logout-button{
-    background-color: rgb(41, 90, 252); /* Color inicial de los botones */
-    color: #fff; /* Color del texto */
+.logout-button {
+    background-color: rgb(41, 90, 252);
+    color: #fff;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
 }
 
-.delete-button:hover{
-    background-color: rgb(204, 7, 7); /* Color de los botones al pasar el mouse */
+.delete-button:hover {
+    background-color: rgb(204, 7, 7);
 }
 
 .logout-button:hover {
-    background-color: rgba(12, 0, 238, 0.938); /* Color de los botones al pasar el mouse */
-}
-
-
-
-#salir button:hover {
-    background-color: #f4480e;
+    background-color: rgba(12, 0, 238, 0.938);
 }
 
 .actions {
@@ -106,8 +105,12 @@ button:hover {
 }
 
 @media (max-width: 600px) {
+    h2, h3 {
+        font-size: 1.2rem;
+    }
+
     table, th, td {
-        font-size: 14px;
+        font-size: 0.9rem;
         padding: 8px;
     }
 
@@ -116,6 +119,6 @@ button:hover {
     }
 
     input, button {
-        font-size: 14px;
+        font-size: 0.9rem;
     }
 }

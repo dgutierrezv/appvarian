@@ -1,0 +1,59 @@
+
+para arrancar el server uvicron de FASTAPI:  uvicorn main:app --reload
+
+
+
+my_web_app/
+├── main.py
+├── templates/
+│   ├── index.html
+│   ├── login.html
+│   ├── stock.html
+└── static/
+    ├── css/
+    │   └── styles.css
+    ├── js/
+    │   └── scripts.js
+
+
+
+
+
+mongodb+srv://dgutierrez:ExMv2hxPlRFbxO5F@cluster0.tbkpj5f.mongodb.net/
+
+
+username: dgutierrez
+password: ExMv2hxPlRFbxO5F
+
+
+
+
+para crear un entorno virtual en python:
+
+python3 -m venv venv
+
+venv\Scripts\activate
+
+
+
+para ver las librerias
+pip list
+
+
+
+para actualizar el pip
+python.exe -m pip install --upgrade pip
+
+
+
+
+PARA HACER CAMBIOS AL CODIGO Y SUBIR A GITHUB:
+
+pip freeze > requirements.txt
+
+git add .
+
+git commit -m "COMMIT #1"
+
+git push
+

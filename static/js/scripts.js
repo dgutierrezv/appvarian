@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     deleteForms.forEach(form => {
         form.addEventListener('submit', function(event) {
-            const confirmed = confirm('Are you sure you want to delete this part?');
+            const confirmed = confirm('Esta seguro de querer borrar esta parte?');
             if (!confirmed) {
                 event.preventDefault();
             }

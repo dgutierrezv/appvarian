@@ -4,12 +4,14 @@
     <title>Stock Varian CR</title>
     <link rel="stylesheet" href="/static/css/styles.css">
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 </head>
 <body>
     <h2>Stock de Repuestos Varian</h2>
     <form method="post" action="/add_part">
         <label for="part_number">Número de Parte:</label>
         <input type="text" id="part_number" name="part_number" required>
+        <button type="button" id="start-scan">Escanear Código de Barras</button>
         <label for="description">Descripción:</label>
         <input type="text" id="description" name="description" required>
         <label for="quantity">Cantidad:</label>
@@ -18,11 +20,15 @@
         <input type="text" id="warehouse" name="warehouse" required>
         <button type="submit">Agregar Parte</button>
     </form>
+    <div id="scanner-container" style="display:none;">
+        <video id="scanner" width="300" height="200"></video>
+    </div>
     <h3>Buscar Partes</h3>
     <form method="post" action="/search">
-        <input type="text" name="query" placeholder="Buscar por bodega, número de parte o descripción" required>
+        <input type="text" name="form_query" placeholder="Buscar por bodega, número de parte o descripción" required>
         <button type="submit">Buscar</button>
     </form>
+    {% if parts %}
     <h3>Listado de Partes</h3>
     <table>
         <tr>
@@ -55,9 +61,38 @@
         </tr>
         {% endfor %}
     </table>
+    {% endif %}
     <form action="/logout" method="get">
         <button type="submit" class="logout-button">Salir</button>
     </form>
     <script src="/static/js/scripts.js"></script>
+    <script>
+        document.getElementById('start-scan').addEventListener('click', function() {
+            document.getElementById('scanner-container').style.display = 'block';
+            Quagga.init({
+                inputStream : {
+                    name : "Live",
+                    type : "LiveStream",
+                    target: document.querySelector('#scanner')
+                },
+                decoder : {
+                    readers : ["code_128_reader"]
+                }
+            }, function(err) {
+                if (err) {
+                    console.log(err);
+                    return
+                }
+                console.log("Initialization finished. Ready to start");
+                Quagga.start();
+            });
+
+            Quagga.onDetected(function(data) {
+                document.getElementById('part_number').value = data.codeResult.code;
+                Quagga.stop();
+                document.getElementById('scanner-container').style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>

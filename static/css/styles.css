@@ -1,0 +1,121 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+h2, h3 {
+    text-align: center;
+    margin: 10px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    width: 90%;
+    max-width: 500px;
+}
+
+input, button {
+    margin: 5px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+table {
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #f2f2f2;
+    color: black;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.delete-button{
+    background-color: rgb(255, 0, 0); /* Color inicial de los botones */
+    color: #fff; /* Color del texto */
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.logout-button{
+    background-color: rgb(41, 90, 252); /* Color inicial de los botones */
+    color: #fff; /* Color del texto */
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.delete-button:hover{
+    background-color: rgb(204, 7, 7); /* Color de los botones al pasar el mouse */
+}
+
+.logout-button:hover {
+    background-color: rgba(12, 0, 238, 0.938); /* Color de los botones al pasar el mouse */
+}
+
+
+
+#salir button:hover {
+    background-color: #f4480e;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+@media (max-width: 600px) {
+    table, th, td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    form {
+        width: 100%;
+    }
+
+    input, button {
+        font-size: 14px;
+    }
+}

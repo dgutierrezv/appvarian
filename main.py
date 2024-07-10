@@ -71,6 +71,8 @@ async def read_login(request: Request):
 
 @app.post("/login", response_class=HTMLResponse)
 async def login(request: Request, username: str = Form(...), password: str = Form(...)):
+    if not username or not password:
+        return templates.TemplateResponse("login.html", {"request": request, "error": "Both fields are required"})
     user = authenticate_user(fake_users_db, username, password)
     if not user:
         return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid credentials"})

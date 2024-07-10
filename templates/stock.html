@@ -7,7 +7,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 </head>
 <body>
-    <h2>Stock de Repuestos Varian</h2>
+    <h1>Stock de Repuestos Varian</h1>
+    <h2>Ingreso de Partes Nuevas</h2>
     <form method="post" action="/add_part">
         <label for="part_number">Número de Parte:</label>
         <input type="text" id="part_number" name="part_number" required>
@@ -20,18 +21,12 @@
         <input type="text" id="warehouse" name="warehouse" required>
         <button type="submit">Agregar Parte</button>
     </form>
-    <div id="scanner-container" style="display:none;">
-        <video id="scanner" width="300" height="200" autoplay></video>
-    </div>
     <h3>Buscar Partes</h3>
     <form method="post" action="/search">
         <input type="text" id="search_query" name="form_query" placeholder="Buscar por bodega, número de parte o descripción" required>
-        <button type="button" id="start-search-scan">Escanear Código de Barras</button>
+        <button type="button" id="start-scan-search">Escanear Código de Barras</button>
         <button type="submit">Buscar</button>
     </form>
-    <div id="search-scanner-container" style="display:none;">
-        <video id="search-scanner" width="300" height="200" autoplay></video>
-    </div>
     {% if parts %}
     <h3>Listado de Partes</h3>
     <table>
@@ -69,6 +64,11 @@
     <form action="/logout" method="get">
         <button type="submit" class="logout-button">Salir</button>
     </form>
+    <div id="scanner-modal" style="display:none;">
+        <div id="scanner-container">
+            <video id="scanner" width="300" height="200"></video>
+        </div>
+    </div>
     <script src="/static/js/scripts.js"></script>
 </body>
 </html>

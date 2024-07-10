@@ -3,69 +3,49 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     deleteForms.forEach(form => {
         form.addEventListener('submit', function(event) {
-            const confirmed = confirm('Are you sure you want to delete this part?');
+            const confirmed = confirm('Esta seguro de querer eliminar esta parte!?');
             if (!confirmed) {
                 event.preventDefault();
             }
         });
     });
 
-    function initScanner(scannerContainerId, videoElementId, inputElementId) {
-        const scannerContainer = document.getElementById(scannerContainerId);
-        const videoElement = document.getElementById(videoElementId);
-        const inputElement = document.getElementById(inputElementId);
+    function startScanner(callback) {
+        document.getElementById('scanner-modal').style.display = 'flex';
+        Quagga.init({
+            inputStream : {
+                name : "Live",
+                type : "LiveStream",
+                target: document.querySelector('#scanner')
+            },
+            decoder : {
+                readers : ["code_128_reader"]
+            }
+        }, function(err) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log("Initialization finished. Ready to start");
+            Quagga.start();
+        });
 
-        function stopScan() {
-            const stream = videoElement.srcObject;
-            const tracks = stream.getTracks();
-            tracks.forEach(track => track.stop());
-            videoElement.srcObject = null;
-            scannerContainer.style.display = 'none';
-        }
-
-        function startScan() {
-            scannerContainer.style.display = 'block';
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-                .then(stream => {
-                    videoElement.srcObject = stream;
-                })
-                .catch(console.error);
-
-            videoElement.addEventListener('loadeddata', (event) => {
-                Quagga.init({
-                    inputStream: {
-                        name: "Live",
-                        type: "LiveStream",
-                        target: videoElement,
-                        constraints: {
-                            facingMode: "environment"
-                        },
-                    },
-                    decoder: {
-                        readers: ["code_128_reader"]
-                    }
-                }, (err) => {
-                    if (err) {
-                        console.log(err);
-                        return;
-                    }
-                    Quagga.start();
-                });
-
-                Quagga.onDetected((data) => {
-                    inputElement.value = data.codeResult.code;
-                    Quagga.stop();
-                    stopScan();
-                });
-            });
-        }
-
-        return startScan;
+        Quagga.onDetected(function(data) {
+            callback(data.codeResult.code);
+            Quagga.stop();
+            document.getElementById('scanner-modal').style.display = 'none';
+        });
     }
 
-    const startPartScan = initScanner('scanner-container', 'scanner', 'part_number');
-    const startSearchScan = initScanner('search-scanner-container', 'search-scanner', 'search_query');
+    document.getElementById('start-scan').addEventListener('click', function() {
+        startScanner(function(code) {
+            document.getElementById('part_number').value = code;
+        });
+    });
 
-    document.getElementById('start-scan').addEventListener('click', startPartScan);
-    document.getElementById('start-search-scan').addEventListener('click', startSearchScan);
+    document.getElementById('start-scan-search').addEventListener('click', function() {
+        startScanner(function(code) {
+            document.getElementById('search_query').value = code;
+        });
+    });
 });

@@ -2,13 +2,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const deleteForms = document.querySelectorAll('.delete-form');
     const scannerModal = document.getElementById('scanner-modal');
     const scannerContainer = document.querySelector('.scanner-container');
-    const scannerVideo = document.getElementById('scanner');
     const closeScannerButton = document.getElementById('close-scanner');
-    let scannerStream;
 
     deleteForms.forEach(form => {
         form.addEventListener('submit', function(event) {
-            const confirmed = confirm('Esta seguro de querer borrar esta parte?');
+            const confirmed = confirm('¿Está seguro de querer borrar esta parte?');
             if (!confirmed) {
                 event.preventDefault();
             }
@@ -17,50 +15,40 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function startScanner(callback) {
         scannerModal.style.display = 'flex';
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-            .then(stream => {
-                scannerStream = stream;
-                scannerVideo.srcObject = stream;
-                scannerVideo.setAttribute('playsinline', true); // required to tell iOS safari we don't want fullscreen
-                scannerVideo.play();
-                requestAnimationFrame(tick);
-            });
 
-        function tick() {
-            if (scannerVideo.readyState === scannerVideo.HAVE_ENOUGH_DATA) {
-                const canvas = document.createElement('canvas');
-                canvas.width = scannerVideo.videoWidth;
-                canvas.height = scannerVideo.videoHeight;
-                const context = canvas.getContext('2d');
-                context.drawImage(scannerVideo, 0, 0, canvas.width, canvas.height);
-                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-                
-                Quagga.decodeSingle({
-                    src: imageData,
-                    numOfWorkers: 0,  // Needs to be 0 when used within node
-                    decoder: {
-                        readers: ["code_128_reader"]
-                    },
-                    locate: true
-                }, function(result) {
-                    if (result && result.codeResult) {
-                        callback(result.codeResult.code);
-                        stopScanner();
-                    } else {
-                        requestAnimationFrame(tick);
-                    }
-                });
-            } else {
-                requestAnimationFrame(tick);
+        // Ajustar el tamaño del contenedor de la cámara
+        scannerContainer.style.width = '300px';  // Ajusta el ancho según tus necesidades
+        scannerContainer.style.height = '200px'; // Ajusta la altura según tus necesidades
+
+        Quagga.init({
+            inputStream: {
+                type: 'LiveStream',
+                target: scannerContainer,
+                constraints: {
+                    facingMode: 'environment'
+                }
+            },
+            decoder: {
+                readers: ['code_128_reader']
             }
-        }
+        }, function(err) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            Quagga.start();
+        });
+
+        Quagga.onDetected(function(result) {
+            const code = result.codeResult.code;
+            callback(code);
+            stopScanner();
+        });
     }
 
     function stopScanner() {
         scannerModal.style.display = 'none';
-        if (scannerStream) {
-            scannerStream.getTracks().forEach(track => track.stop());
-        }
+        Quagga.stop();
     }
 
     document.getElementById('start-scan').addEventListener('click', function() {
@@ -80,22 +68,31 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const updateForms = document.querySelectorAll('.update-form');
     updateForms.forEach(form => {
         const inputs = form.querySelectorAll('input');
-        const submitButton = form.querySelector('button[type="submit"]');
+        const submitButton = form.querySelector('button.actualizar-button');
         const cancelButton = form.querySelector('.cancel-button');
         let originalValues = {};
 
         inputs.forEach(input => {
             originalValues[input.name] = input.value;
             input.addEventListener('input', () => {
+                submitButton.style.display = 'inline-block';
                 submitButton.disabled = false;
                 cancelButton.style.display = 'inline-block';
             });
+        });
+
+        form.addEventListener('submit', function(event) {
+            const confirmed = confirm('¿Estás seguro de que deseas realizar los cambios?');
+            if (!confirmed) {
+                event.preventDefault();
+            }
         });
 
         cancelButton.addEventListener('click', () => {
             inputs.forEach(input => {
                 input.value = originalValues[input.name];
             });
+            submitButton.style.display = 'none';
             submitButton.disabled = true;
             cancelButton.style.display = 'none';
         });

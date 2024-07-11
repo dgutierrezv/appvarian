@@ -48,10 +48,10 @@
                     <form method="post" action="/update_part" style="display:inline;" class="update-form">
                         <input type="hidden" name="id" value="{{ part._id }}">
                         <input type="text" name="part_number" value="{{ part.part_number }}" placeholder="Número de parte" required>
-                        <input type="text" name="description" value="{{ part.description }}" placeholder="Descripción"required>
+                        <input type="text" name="description" value="{{ part.description }}" placeholder="Descripción" required>
                         <input type="number" name="quantity" value="{{ part.quantity }}" placeholder="Cantidad" required>
                         <input type="text" name="warehouse" value="{{ part.warehouse }}" placeholder="Bodega" required>
-                        <button type="submit" disabled class="actualizar-button">Actualizar</button>
+                        <button type="submit" class="actualizar-button" style="display:none;">Actualizar</button>
                         <button type="button" class="cancel-button" style="display:none;">Cancelar</button>
                     </form>
                     <form method="post" action="/delete_part" class="delete-form" style="display:inline;">
@@ -73,6 +73,8 @@
             </div>
         </div>
     </div>
+    <!-- Incluir QuaggaJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
     <script src="/static/js/scripts.js"></script>
 </body>
 </html>

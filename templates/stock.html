@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Stock de Repuestos Varian</h2>
+        <h2>Agregar Parte</h2>
         <form method="post" action="/add_part" class="form">
             <label for="part_number">Número de Parte:</label>
             <input type="text" id="part_number" name="part_number" required>
@@ -22,7 +22,7 @@
             <input type="text" id="warehouse" name="warehouse" required>
             <button type="submit">Agregar Parte</button>
         </form>
-        <h3>Buscar Partes</h3>
+        <h2>Buscar Parte</h2>
         <form method="post" action="/search" class="form">
             <input type="text" id="search_query" name="form_query" placeholder="Buscar por bodega, número de parte o descripción" required>
             <button type="button" id="start-scan-search">Escanear Código de Barras</button>

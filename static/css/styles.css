@@ -16,8 +16,8 @@ body {
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
     max-width: 800px;
+    width: 100%;
     text-align: center;
 }
 
@@ -79,8 +79,6 @@ h2, h3 {
     background-color: rgb(45, 202, 6);
     transition: background-color 0.3s;
 }
-
-
 
 table {
     width: 100%;
@@ -177,6 +175,7 @@ tr:nth-child(even) {
 @media (max-width: 600px) {
     .container {
         padding: 1rem;
+        width: min-content;
     }
 
     .form input, .form button {

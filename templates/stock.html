@@ -17,8 +17,8 @@
             });
             </script>
             <input type="text" id="search_query" name="form_query" placeholder="Buscar por bodega, número de parte o descripción" required>
-            <button type="button" id="start-scan-search">Escanear Código de Barras</button>
             <button type="submit">Buscar</button>
+            <button type="button" id="start-scan-search">Escanear Código de Barras</button>
         </form>
         <h2>Agregar Parte</h2>
         <form method="post" action="/add_part" class="form">
@@ -68,6 +68,9 @@
             {% endfor %}
         </table>
         {% endif %}
+        <form action="/clean" method="get">
+          <button type="submit" class="clean-button">Limpiar Datos</button>
+      </form>
         <form action="/logout" method="get">
             <button type="submit" class="logout-button">Salir</button>
         </form>
@@ -82,12 +85,30 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
     <script src="/static/js/scripts.js"></script>
 
-  <!-- Modal para éxito -->
-<div id="successModal" class="modal">
+  <!-- Modal para éxito Add-->
+<div id="successAddModal" class="modal">
   <div class="modal-content">
-    <span class="close" id="closeSuccessModal">&times;</span>
+    <span class="close" id="closeSuccessAddModal">&times;</span>
     <p>Parte agregada correctamente</p>
-    <button id="okSuccessBtn">OK</button>
+    <button id="okSuccessAddBtn">OK</button>
+  </div>
+</div>
+
+  <!-- Modal para éxito Update -->
+  <div id="successUpdateModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeSuccessUpdateModal">&times;</span>
+      <p>Parte actualizada correctamente</p>
+      <button id="okSuccessUpdateBtn">OK</button>
+    </div>
+  </div>
+
+    <!-- Modal para éxito Delete-->
+<div id="successDeleteModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeSuccessDeleteModal">&times;</span>
+    <p>Parte eliminada correctamente</p>
+    <button id="okSuccessDeleteBtn">OK</button>
   </div>
 </div>
 
@@ -102,24 +123,47 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', (event) => {
-  const successModal = document.getElementById('successModal');
-  const closeSuccessModal = document.getElementById('closeSuccessModal');
-  const okSuccessBtn = document.getElementById('okSuccessBtn');
+  const successAddModal = document.getElementById('successAddModal');
+  const closeSuccessAddModal = document.getElementById('closeSuccessAddModal');
+  const okSuccessAddBtn = document.getElementById('okSuccessAddBtn');
   
   const errorModal = document.getElementById('errorModal');
   const closeErrorModal = document.getElementById('closeErrorModal');
   const okErrorBtn = document.getElementById('okErrorBtn');
 
-  if ("{{ success }}") {
-    successModal.style.display = "block";
+  const successUpdateModal = document.getElementById('successUpdateModal');
+  const closeSuccessUpdateModal = document.getElementById('closeSuccessUpdateModal');
+  const okSuccessUpdateBtn = document.getElementById('okSuccessUpdateBtn');
+
+  const successDeleteModal = document.getElementById('successDeleteModal');
+  const closeSuccessDeleteModal = document.getElementById('closeSuccessDeleteModal');
+  const okSuccessDeleteBtn = document.getElementById('okSuccessDeleteBtn');
+
+
+  if ("{{ success_add }}") {
+    successAddModal.style.display = "block";
   }
   
+  if ("{{ success_update }}") {
+    successUpdateModal.style.display = "block";
+  }
+
+  if ("{{ success_delete }}") {
+    successDeleteModal.style.display = "block";
+  }
+
   if ("{{ error }}") {
     errorModal.style.display = "block";
   }
 
-  closeSuccessModal.onclick = () => { successModal.style.display = "none"; };
-  okSuccessBtn.onclick = () => { successModal.style.display = "none"; };
+  closeSuccessAddModal.onclick = () => { successAddModal.style.display = "none"; };
+  okSuccessAddBtn.onclick = () => { successAddModal.style.display = "none"; };
+
+  closeSuccessUpdateModal.onclick = () => { successUpdateModal.style.display = "none"; };
+  okSuccessUpdateBtn.onclick = () => { successUpdateModal.style.display = "none"; };
+
+  closeSuccessDeleteModal.onclick = () => { successDeleteModal.style.display = "none"; };
+  okSuccessDeleteBtn.onclick = () => { successDeleteModal.style.display = "none"; };
 
   closeErrorModal.onclick = () => { errorModal.style.display = "none"; };
   okErrorBtn.onclick = () => { errorModal.style.display = "none"; };

@@ -94,15 +94,15 @@ async def add_part(request: Request, part_number: str = Form(...), description: 
     
     part = {"part_number": part_number, "description": description, "quantity": quantity, "warehouse": warehouse}
     await collection.insert_one(part)
-    parts = await collection.find().to_list(100)
-    return templates.TemplateResponse("stock.html", {"request": request, "parts": parts, "success": "Parte agregada correctamente"})
-
+    parts = await collection.find(part).to_list(100)
+    return templates.TemplateResponse("stock.html", {"request": request, "parts": parts,  "success_add": "Parte agregada correctamente"})
 
 
 @app.post("/update_part", response_class=HTMLResponse)
 async def update_part(request: Request, id: str = Form(...), part_number: str = Form(...), description: str = Form(...), quantity: int = Form(...), warehouse: str = Form(...)):
     await collection.update_one({"_id": ObjectId(id)}, {"$set": {"part_number": part_number, "description": description, "quantity": quantity, "warehouse": warehouse}})
-    return RedirectResponse(url=f"/search?query={part_number}", status_code=302)
+    parts = await collection.find({"part_number": part_number, "description": description, "quantity": quantity, "warehouse": warehouse}).to_list(100)
+    return templates.TemplateResponse("stock.html", {"request": request, "parts": parts,  "success_update": "Parte actualizada correctamente"})
 
 @app.post("/delete_part", response_class=HTMLResponse)
 async def delete_part(request: Request, id: str = Form(...)):
@@ -110,7 +110,7 @@ async def delete_part(request: Request, id: str = Form(...)):
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Part not found")
     parts = await collection.find().to_list(100)
-    return templates.TemplateResponse("stock.html", {"request": request, "parts": parts, "success": "Parte eliminada correctamente"})
+    return templates.TemplateResponse("stock.html", {"request": request, "success_delete": "Parte eliminada correctamente"})
 
 @app.get("/search", response_class=HTMLResponse)
 @app.post("/search", response_class=HTMLResponse)
@@ -125,6 +125,10 @@ async def search(request: Request, query: str = Query(None), form_query: str = F
         ]
     }).to_list(100)
     return templates.TemplateResponse("stock.html", {"request": request, "parts": parts})
+
+@app.get("/clean", response_class=HTMLResponse)
+async def clean(request: Request):
+    return templates.TemplateResponse("stock.html", {"request": request})
 
 @app.get("/logout", response_class=HTMLResponse)
 async def logout(request: Request):

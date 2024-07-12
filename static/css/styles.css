@@ -38,7 +38,7 @@ h2, h3 {
     padding: 0.75rem;
     width: 100%;
     max-width: 400px;
-    border: 1px solid #f2f8ff;
+    border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1rem;
 }
@@ -52,6 +52,7 @@ h2, h3 {
     cursor: pointer;
     margin-top: 0.5rem;
     transition: background-color 0.3s;
+    width: 50%;
 }
 
 .form button:hover, .logout-button:hover, .actualizar-button:hover{
@@ -70,6 +71,7 @@ h2, h3 {
     cursor: pointer;
     margin-top: 0.5rem;
     transition: background-color 0.3s;
+    width: 50%;
 }
 
 .clean-button:hover{
@@ -112,6 +114,7 @@ tr:nth-child(even) {
     border-radius: 5px;
     cursor: pointer;
     margin-top: 0.5rem;
+    width: 50%;
 }
 
 .delete-button:hover {

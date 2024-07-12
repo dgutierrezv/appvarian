@@ -11,6 +11,11 @@
     <div class="container">
         <h2>Buscar Parte</h2>
         <form method="post" action="/search" class="form">
+          <script>
+            document.getElementById('form_query').addEventListener('change', function() {
+              this.form.submit();
+            });
+            </script>
             <input type="text" id="search_query" name="form_query" placeholder="Buscar por bodega, número de parte o descripción" required>
             <button type="button" id="start-scan-search">Escanear Código de Barras</button>
             <button type="submit">Buscar</button>
@@ -76,5 +81,51 @@
     <!-- Incluir QuaggaJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
     <script src="/static/js/scripts.js"></script>
+
+  <!-- Modal para éxito -->
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeSuccessModal">&times;</span>
+    <p>Parte agregada correctamente</p>
+    <button id="okSuccessBtn">OK</button>
+  </div>
+</div>
+
+<!-- Modal para error -->
+<div id="errorModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeErrorModal">&times;</span>
+    <p>Número de parte ya existe en la bodega</p>
+    <button id="okErrorBtn">OK</button>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+  const successModal = document.getElementById('successModal');
+  const closeSuccessModal = document.getElementById('closeSuccessModal');
+  const okSuccessBtn = document.getElementById('okSuccessBtn');
+  
+  const errorModal = document.getElementById('errorModal');
+  const closeErrorModal = document.getElementById('closeErrorModal');
+  const okErrorBtn = document.getElementById('okErrorBtn');
+
+  if ("{{ success }}") {
+    successModal.style.display = "block";
+  }
+  
+  if ("{{ error }}") {
+    errorModal.style.display = "block";
+  }
+
+  closeSuccessModal.onclick = () => { successModal.style.display = "none"; };
+  okSuccessBtn.onclick = () => { successModal.style.display = "none"; };
+
+  closeErrorModal.onclick = () => { errorModal.style.display = "none"; };
+  okErrorBtn.onclick = () => { errorModal.style.display = "none"; };
+});
+</script>
+
+
 </body>
 </html>

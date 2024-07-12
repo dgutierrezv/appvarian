@@ -87,14 +87,30 @@ async def read_stock(request: Request):
 
 @app.post("/add_part", response_class=HTMLResponse)
 async def add_part(request: Request, part_number: str = Form(...), description: str = Form(...), quantity: int = Form(...), warehouse: str = Form(...)):
+    existing_part = await collection.find_one({"part_number": part_number, "warehouse": warehouse})
+    if existing_part:
+        parts = await collection.find().to_list(100)
+        return templates.TemplateResponse("stock.html", {"request": request, "parts": parts, "error": "Número de parte ya existe en la bodega"})
+    
     part = {"part_number": part_number, "description": description, "quantity": quantity, "warehouse": warehouse}
     await collection.insert_one(part)
-    return RedirectResponse(url="/stock", status_code=302)
+    parts = await collection.find().to_list(100)
+    return templates.TemplateResponse("stock.html", {"request": request, "parts": parts, "success": "Parte agregada correctamente"})
+
+
 
 @app.post("/update_part", response_class=HTMLResponse)
 async def update_part(request: Request, id: str = Form(...), part_number: str = Form(...), description: str = Form(...), quantity: int = Form(...), warehouse: str = Form(...)):
     await collection.update_one({"_id": ObjectId(id)}, {"$set": {"part_number": part_number, "description": description, "quantity": quantity, "warehouse": warehouse}})
     return RedirectResponse(url=f"/search?query={part_number}", status_code=302)
+
+@app.post("/delete_part", response_class=HTMLResponse)
+async def delete_part(request: Request, id: str = Form(...)):
+    result = await collection.delete_one({"_id": ObjectId(id)})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Part not found")
+    parts = await collection.find().to_list(100)
+    return templates.TemplateResponse("stock.html", {"request": request, "parts": parts, "success": "Parte eliminada correctamente"})
 
 @app.get("/search", response_class=HTMLResponse)
 @app.post("/search", response_class=HTMLResponse)

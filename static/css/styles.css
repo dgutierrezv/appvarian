@@ -124,6 +124,25 @@ tr:nth-child(even) {
     background-color: rgb(204, 7, 7);
 }
 
+.cancel-button {
+    background-color: #ff6347;
+    font-size: 1rem;
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 0.5rem;
+    width: 50%;
+    min-width: fit-content;
+    text-align: center;
+}
+
+.cancel-button:hover {
+    background-color: #ff4500;
+}
+
 .scanner-modal {
     position: fixed;
     top: 0;
@@ -155,24 +174,6 @@ tr:nth-child(even) {
 }
 
 .scanner-container button:hover {
-    background-color: #ff4500;
-}
-
-.cancel-button {
-    background-color: #ff6347;
-    font-size: 1rem;
-    color: white;
-    border: none;
-    padding: 0.75rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 0.5rem;
-    width: 50%;
-    text-align: center;
-}
-
-.cancel-button:hover {
     background-color: #ff4500;
 }
 

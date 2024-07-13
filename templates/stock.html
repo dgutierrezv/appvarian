@@ -50,7 +50,7 @@
                 <td>{{ part.quantity }}</td>
                 <td>{{ part.warehouse }}</td>
                 <td class="actions">
-                    <form method="post" action="/update_part" style="display:inline;" class="update-form">
+                    <form method="post" action="/update_part" style="display:contents; align-items: center" class="update-form">
                         <input type="hidden" name="id" value="{{ part._id }}">
                         <input type="text" name="part_number" value="{{ part.part_number }}" placeholder="Número de parte" required>
                         <input type="text" name="description" value="{{ part.description }}" placeholder="Descripción" required>
@@ -59,7 +59,7 @@
                         <button type="submit" class="actualizar-button" style="display:none;">Actualizar</button>
                         <button type="button" class="cancel-button" style="display:none;">Cancelar</button>
                     </form>
-                    <form method="post" action="/delete_part" class="delete-form" style="display:inline;">
+                    <form method="post" action="/delete_part" class="delete-form" style="display:contents;">
                         <input type="hidden" name="id" value="{{ part._id }}">
                         <button type="submit" class="delete-button">Borrar</button>
                     </form>

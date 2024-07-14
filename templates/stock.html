@@ -41,7 +41,7 @@
                 <th>Descripción</th>
                 <th>Cantidad</th>
                 <th>Bodega</th>
-                <th>Acciones</th>
+                <th class="acciones-col">Acciones</th>
             </tr>
             {% for part in parts %}
             <tr>
@@ -49,7 +49,7 @@
                 <td>{{ part.description }}</td>
                 <td>{{ part.quantity }}</td>
                 <td>{{ part.warehouse }}</td>
-                <td class="actions">
+                <td class="actions acciones-col">
                     <form method="post" action="/update_part" style="display:contents; align-items: center" class="update-form">
                         <input type="hidden" name="id" value="{{ part._id }}">
                         <input type="text" name="part_number" value="{{ part.part_number }}" placeholder="Número de parte" required>

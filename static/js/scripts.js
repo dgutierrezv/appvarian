@@ -59,21 +59,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     document.getElementById('start-scan-search').addEventListener('click', function() {
         startScanner(function(code) {
-            const searchInput = document.getElementById('search_query');
-            searchInput.value = code;
-            searchInput.form.submit();  // Enviar el formulario automáticamente
-
-            // Desplazarse hacia abajo después de la búsqueda
-            searchInput.form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevenir el envío múltiple del formulario
-                fetch(searchInput.form.action, {
-                    method: searchInput.form.method,
-                    body: new FormData(searchInput.form)
-                }).then(response => response.text()).then(html => {
-                    document.documentElement.innerHTML = html;
-                    window.scrollTo(0, document.body.scrollHeight); // Desplazarse hacia abajo
-                });
-            });
+            document.getElementById('search_query').value = code;
         });
     });
 

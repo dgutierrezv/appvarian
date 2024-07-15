@@ -74,10 +74,10 @@ async def read_login(request: Request):
 @app.post("/login", response_class=HTMLResponse)
 async def login(request: Request, username: str = Form(...), password: str = Form(...)):
     if not username or not password:
-        return templates.TemplateResponse("login.html", {"request": request, "error": "Both fields are required"})
+        return templates.TemplateResponse("login.html", {"request": request, "error": "Ambos campos son obligatorios"})
     user = authenticate_user(fake_users_db, username, password)
     if not user:
-        return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid credentials"})
+        return templates.TemplateResponse("login.html", {"request": request, "error": "Credenciales inválidos"})
     request.session["user"] = username
     return RedirectResponse(url="/stock", status_code=302)
 
@@ -126,8 +126,11 @@ async def search(request: Request, query: str = Query(None), form_query: str = F
             {"warehouse": {"$regex": query, "$options": "i"}}
         ]
     }).to_list(100)
-    return templates.TemplateResponse("stock.html", {"request": request, "parts": parts})
-
+    if len(parts) != 0:
+         return templates.TemplateResponse("stock.html", {"request": request, "parts": parts})
+    else:
+        return templates.TemplateResponse("stock.html", {"request": request, "found": "Parte o bodéga no encontrada"})
+   
 @app.get("/clean", response_class=HTMLResponse)
 async def clean(request: Request):
     return templates.TemplateResponse("stock.html", {"request": request})

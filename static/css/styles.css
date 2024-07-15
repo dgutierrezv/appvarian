@@ -238,7 +238,6 @@ tr:nth-child(even) {
         display: none;
     }
     .container {
-        margin: 25px;
         width: 100%;
         }
 

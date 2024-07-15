@@ -9,8 +9,8 @@
 </head>
 <body>
     <div class="container">
-        <h2>Buscar Parte</h2>
         <form method="post" action="/search" class="form">
+          <h2>Buscar Parte</h2>
           <script>
             document.getElementById('form_query').addEventListener('change', function() {
               this.form.submit();
@@ -20,8 +20,8 @@
             <button type="submit">Buscar</button>
             <button type="button" id="start-scan-search">Escanear Código de Barras</button>
         </form>
-        <h2>Agregar Parte</h2>
         <form method="post" action="/add_part" class="form">
+            <h2>Agregar Parte</h2>
             <label for="part_number">Número de Parte:</label>
             <input type="text" id="part_number" name="part_number" required>
             <button type="button" id="start-scan">Escanear Código de Barras</button>
@@ -34,9 +34,11 @@
             <button type="submit">Agregar Parte</button>
         </form>
         {% if parts %}
-        <h3>Listado de Partes</h3>
         <table>
-            <tr>
+          
+            <tr> 
+              <tr> 
+              <td colspan="5"><h2>Listado de Partes</h2></td></tr> 
                 <th>Número Parte</th>
                 <th>Descripción</th>
                 <th>Cantidad</th>

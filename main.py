@@ -6,12 +6,11 @@ from fastapi.templating import Jinja2Templates
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
 from starlette.middleware.sessions import SessionMiddleware
-from fastapi.staticfiles import StaticFiles
+from passlib.context import CryptContext
 
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
 app.add_middleware(SessionMiddleware, secret_key="your_secret_key")
 
 templates = Jinja2Templates(directory="templates")
@@ -23,24 +22,27 @@ client = AsyncIOMotorClient("mongodb+srv://dgutierrez:ExMv2hxPlRFbxO5F@cluster0.
 db = client.stock_db
 collection = db.parts
 
+# Password hashing
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 fake_users_db = {
     "varian": {
         "username": "varian",
         "full_name": "Varian User",
         "email": "varian@example.com",
-        "hashed_password": "1e$civres",
+        "hashed_password": pwd_context.hash("1e$civres"),
         "disabled": False,
     }
 }
 
-def fake_hash_password(password: str):
-    return password
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
 
 def authenticate_user(fake_db, username: str, password: str):
     user = fake_db.get(username)
     if not user:
         return False
-    if not fake_hash_password(password) == user["hashed_password"]:
+    if not verify_password(password, user["hashed_password"]):
         return False
     return user
 
@@ -89,20 +91,20 @@ async def read_stock(request: Request):
 async def add_part(request: Request, part_number: str = Form(...), description: str = Form(...), quantity: int = Form(...), warehouse: str = Form(...)):
     existing_part = await collection.find_one({"part_number": part_number, "warehouse": warehouse})
     if existing_part:
-        parts = await collection.find().to_list(100)
+        
+        parts = await collection.find(existing_part).to_list(100)
         return templates.TemplateResponse("stock.html", {"request": request, "parts": parts, "error": "Número de parte ya existe en la bodega"})
     
     part = {"part_number": part_number, "description": description, "quantity": quantity, "warehouse": warehouse}
     await collection.insert_one(part)
     parts = await collection.find(part).to_list(100)
-    return templates.TemplateResponse("stock.html", {"request": request, "parts": parts,  "success_add": "Parte agregada correctamente"})
-
+    return templates.TemplateResponse("stock.html", {"request": request, "parts": parts, "success_add": "Parte agregada correctamente"})
 
 @app.post("/update_part", response_class=HTMLResponse)
 async def update_part(request: Request, id: str = Form(...), part_number: str = Form(...), description: str = Form(...), quantity: int = Form(...), warehouse: str = Form(...)):
     await collection.update_one({"_id": ObjectId(id)}, {"$set": {"part_number": part_number, "description": description, "quantity": quantity, "warehouse": warehouse}})
     parts = await collection.find({"part_number": part_number, "description": description, "quantity": quantity, "warehouse": warehouse}).to_list(100)
-    return templates.TemplateResponse("stock.html", {"request": request, "parts": parts,  "success_update": "Parte actualizada correctamente"})
+    return templates.TemplateResponse("stock.html", {"request": request, "parts": parts, "success_update": "Parte actualizada correctamente"})
 
 @app.post("/delete_part", response_class=HTMLResponse)
 async def delete_part(request: Request, id: str = Form(...)):
